@@ -40,13 +40,6 @@ public class DriveParallellToPoseCommand extends Command {
     this.parallelInput = parallelInput;
   }
 
-  public DriveParallellToPoseCommand withJoystickRumble(Command rumbleCommand) {
-    atSetpoint(AlignRoutines.distanceShootTolerance, AlignRoutines.rotationShootTolerance)
-        .onTrue(Commands.deferredProxy(() -> rumbleCommand));
-
-    return this;
-  }
-
   public DriveParallellToPoseCommand withJoystickRumble(
       DoubleSupplier rumbleDistance, Command rumbleCommand) {
     atSetpoint(rumbleDistance).onTrue(Commands.deferredProxy(() -> rumbleCommand));

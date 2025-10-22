@@ -6,7 +6,6 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.rollers.LoggedTrapezoidState;
 import frc.robot.subsystems.rollers.single.SingleRoller;
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
-import frc.robot.subsystems.superstructure.constants.PivotConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Pivot extends SingleRoller {

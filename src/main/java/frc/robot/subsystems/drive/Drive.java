@@ -37,7 +37,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.bobot_state.BobotState;
-import frc.robot.subsystems.quest.TimestampedPose;
 import frc.robot.subsystems.vision.PoseObservation;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -200,17 +199,6 @@ public class Drive extends SubsystemBase {
         constrainedPoseEstimator.addVisionMeasurement(
             constrainedObservation.robotPose().toPose2d(),
             constrainedObservation.timestampSeconds());
-      }
-
-      // Quest
-      if (DriverStation.isEnabled()) {
-        TimestampedPose timestampedPose;
-        while ((timestampedPose = BobotState.getQuestMeasurments().poll()) != null) {
-          globalPoseEstimator.addVisionMeasurement(
-              timestampedPose.pose(), timestampedPose.timestamp()
-              // , QuestConstants.stdDevs
-              );
-        }
       }
     }
 
