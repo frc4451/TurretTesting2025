@@ -1,28 +1,18 @@
 package frc.robot.subsystems.superstructure;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.field.FieldConstants;
-import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardController;
-import frc.robot.subsystems.rollers.follow.FollowRollersIO;
-import frc.robot.subsystems.rollers.follow.FollowRollersIOSim;
-import frc.robot.subsystems.rollers.follow.FollowRollersIOTalonFX;
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
 import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
 // import frc.robot.subsystems.superstructure.constants.SuperStructureConstants;
 // import frc.robot.subsystems.superstructure.mechanism.SuperStructureMechanism;
-import frc.robot.subsystems.superstructure.SuperStructureModes;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretConstants;
-
 import org.littletonrobotics.junction.Logger;
 
 public class SuperStructure extends SubsystemBase {
@@ -35,11 +25,11 @@ public class SuperStructure extends SubsystemBase {
   private boolean isAtMode = false;
 
   public SuperStructure() {
-    SingleRollerIO pivotIO;
+    SingleRollerIO turretIO;
 
     switch (Constants.currentMode) {
       case REAL:
-        pivotIO =
+        turretIO =
             new SingleRollerIOTalonFX(
                 TurretConstants.canId,
                 TurretConstants.reduction,
@@ -52,7 +42,7 @@ public class SuperStructure extends SubsystemBase {
         break;
 
       case SIM:
-        pivotIO =
+        turretIO =
             new SingleRollerIOSim(
                 TurretConstants.gearbox,
                 TurretConstants.reduction,
@@ -64,12 +54,11 @@ public class SuperStructure extends SubsystemBase {
 
       case REPLAY:
       default:
-        pivotIO = new SingleRollerIO() {};
+        turretIO = new SingleRollerIO() {};
         break;
     }
 
-    turret = new Turret(name + "/Turret", pivotIO);
-
+    turret = new Turret(name + "/Turret", turretIO);
   }
 
   @Override
@@ -86,7 +75,6 @@ public class SuperStructure extends SubsystemBase {
     Logger.recordOutput(name + "/IsPivotAtMode", isPivotAtMode);
 
     turret.periodic();
-
   }
 
   // public Command elevatorManualCommand(DoubleSupplier supplier) {

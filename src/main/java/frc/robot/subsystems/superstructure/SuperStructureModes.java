@@ -3,8 +3,8 @@ package frc.robot.subsystems.superstructure;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public enum SuperStructureModes {
-  MINUPOS(Rotation2d.kCCW_90deg),
-  MAXPOS(Rotation2d.kCW_90deg);
+  MINUPOS(Rotation2d.fromDegrees(-90)),
+  MAXPOS(Rotation2d.fromDegrees(90));
 
   public final Rotation2d turretPos;
 

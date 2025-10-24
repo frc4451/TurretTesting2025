@@ -23,6 +23,8 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.superstructure.SuperStructure;
+import frc.robot.subsystems.superstructure.SuperStructureModes;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.CommandCustomXboxController;
 
@@ -36,6 +38,7 @@ public class RobotContainer {
   // Subsystems
   public final Drive drive;
   private final Vision vision = new Vision();
+  public final SuperStructure superS = new SuperStructure();
 
   // Controller
   public final CommandCustomXboxController controller = new CommandCustomXboxController(0);
@@ -102,5 +105,8 @@ public class RobotContainer {
                 () -> -controller.getLeftYSquared(),
                 () -> -controller.getLeftXSquared(),
                 () -> -controller.getRightXSquared()));
+
+    controller.b().onTrue(superS.setModeCommand(SuperStructureModes.MINUPOS));
+    controller.y().onTrue(superS.setModeCommand(SuperStructureModes.MAXPOS));
   }
 }

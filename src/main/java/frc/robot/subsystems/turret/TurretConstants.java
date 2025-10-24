@@ -2,7 +2,6 @@ package frc.robot.subsystems.turret;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 
@@ -25,12 +24,11 @@ public class TurretConstants {
       new Slot0Configs()
           // feedforward
           .withKG(0.3)
-          .withGravityType(GravityTypeValue.Arm_Cosine)
           .withKS(0.15)
           .withKV(0.1)
           .withKA(0.0)
           // feedback
-          .withKP(3.2)
+          .withKP(6.2)
           .withKI(0.0)
           .withKD(0.1);
 
