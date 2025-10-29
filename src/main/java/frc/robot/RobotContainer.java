@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.bobot_state.BobotState;
@@ -96,15 +97,17 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Set up the controls for the Turret Here
 
-    controller
-        .leftTrigger()
-        .or(BobotState.autoAlignEnabled().negate())
-        .whileTrue(
+    switch (Constants.driverControl) {
+      case FREE:
+      default:
+        drive.setDefaultCommand(
             DriveCommands.joystickDrive(
                 drive,
                 () -> -controller.getLeftYSquared(),
                 () -> -controller.getLeftXSquared(),
                 () -> -controller.getRightXSquared()));
+        break;
+    }
 
     controller.b().onTrue(superS.setModeCommand(SuperStructureModes.MINUPOS));
     controller.y().onTrue(superS.setModeCommand(SuperStructureModes.MAXPOS));
