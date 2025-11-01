@@ -16,8 +16,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.bobot_state.BobotState;
+import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOPigeon2;
+import frc.robot.subsystems.drive.ModuleIO;
+import frc.robot.subsystems.drive.ModuleIOSim;
+import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.subsystems.superstructure.SuperStructure;
 import frc.robot.subsystems.superstructure.SuperStructureModes;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.CommandCustomXboxController;
 
 /**
@@ -28,8 +36,8 @@ import frc.robot.util.CommandCustomXboxController;
  */
 public class RobotContainer {
   // Subsystems
-  //   public final Drive drive;
-  //   private final Vision vision = new Vision();
+  public final Drive drive;
+  private final Vision vision = new Vision();
   private final SuperStructure superStructure = new SuperStructure();
 
   // Controller
@@ -42,41 +50,57 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        // drive =
-        //     new Drive(
-        //         new GyroIOPigeon2(),
-        //         new ModuleIOSpark(0),
-        //         new ModuleIOSpark(1),
-        //         new ModuleIOSpark(2),
-        //         new ModuleIOSpark(3));
+        drive =
+            new Drive(
+                new GyroIOPigeon2(),
+                new ModuleIOSpark(0),
+                new ModuleIOSpark(1),
+                new ModuleIOSpark(2),
+                new ModuleIOSpark(3));
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        // drive =
-        //     new Drive(
-        //         new GyroIO() {},
-        //         new ModuleIOSim(),
-        //         new ModuleIOSim(),
-        //         new ModuleIOSim(),
-        //         new ModuleIOSim());
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim(),
+                new ModuleIOSim());
 
         break;
 
       case REPLAY:
       default:
         // Replayed robot, disable IO implementations
-        // drive =
-        //     new Drive(
-        //         new GyroIO() {},
-        //         new ModuleIO() {},
-        //         new ModuleIO() {},
-        //         new ModuleIO() {},
-        //         new ModuleIO() {});
+        drive =
+            new Drive(
+                new GyroIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {},
+                new ModuleIO() {});
         break;
     }
+
+    configureDefaultControls();
     // Configure the button bindings
     configureButtonBindings();
+  }
+
+  private void configureDefaultControls() {
+    switch (Constants.driverControl) {
+      case FREE:
+      default:
+        drive.setDefaultCommand(
+            DriveCommands.joystickDrive(
+                drive,
+                () -> -controller.getLeftYSquared(),
+                () -> -controller.getLeftXSquared(),
+                () -> -controller.getRightXSquared()));
+        break;
+    }
   }
 
   /**
@@ -90,5 +114,7 @@ public class RobotContainer {
     controller.leftX().whileTrue(superStructure.turretManualCommand(() -> controller.getLeftX()));
     controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.MINIMUM));
     controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.MAXIMUM));
+
+    controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
   }
 }

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.superstructure.turret;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -11,7 +11,7 @@ public class TurretConstants {
 
   public static final DCMotor gearbox = DCMotor.getFalcon500Foc(1);
   public static final double reduction = 15.0;
-  public static final double moi = 1.0;
+  public static final double moi = 0.000002;
 
   public static final boolean invert = true;
   public static final double currentLimitAmps = 30;
@@ -20,7 +20,8 @@ public class TurretConstants {
 
   // Tune this as needed
   public static final Rotation2d intialPosition = Rotation2d.fromDegrees(0);
-  public static final Rotation2d maximumPosition = Rotation2d.fromDegrees(180);
+  public static final Rotation2d minimumPosition = Rotation2d.fromDegrees(-90);
+  public static final Rotation2d maximumPosition = Rotation2d.fromDegrees(90);
 
   // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-vertical-arm.html#combined-feedforward-and-feedback-control
   public static final Slot0Configs gains =

@@ -1,9 +1,10 @@
 package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.subsystems.turret.TurretConstants;
+import frc.robot.subsystems.superstructure.turret.TurretConstants;
 
 public enum SuperStructureModes {
+  AUTOAIMTURRET(Rotation2d.kZero),
   MINIMUM(TurretConstants.intialPosition),
   MAXIMUM(TurretConstants.maximumPosition);
 
