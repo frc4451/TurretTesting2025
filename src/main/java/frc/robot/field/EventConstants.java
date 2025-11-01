@@ -5,66 +5,26 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 
 public enum EventConstants {
-  HOME(
-      Units.inchesToMeters(-6.5),
-      Units.inchesToMeters(6.5),
-      Units.inchesToMeters(17.0),
-      Units.inchesToMeters(21.0),
-      Units.inchesToMeters(25.0),
-      Units.inchesToMeters(20.0),
-      Units.inchesToMeters(25.0),
-      Units.inchesToMeters(23.5),
-      Units.inchesToMeters(24.0),
-      Units.inchesToMeters(44.0),
-      Units.inchesToMeters(40.0),
-      new Transform2d(
-          Units.inchesToMeters(22), Units.inchesToMeters(2), Rotation2d.fromDegrees(180 + 30)),
-      new Transform2d(
-          Units.inchesToMeters(22), Units.inchesToMeters(-1), Rotation2d.fromDegrees(180 - 30))),
-  NORTH_CHARLESTON(
-      Units.inchesToMeters(-7.0),
-      Units.inchesToMeters(8.0),
-      Units.inchesToMeters(16.0),
-      Units.inchesToMeters(19.0),
-      Units.inchesToMeters(25.0),
-      Units.inchesToMeters(17.0),
-      Units.inchesToMeters(25.0),
-      Double.NaN,
-      Double.NaN,
-      Double.NaN,
-      Double.NaN,
-      Transform2d.kZero,
-      Transform2d.kZero),
-  DCMP(
-      Units.inchesToMeters(-6.5),
-      Units.inchesToMeters(6.5),
-      Units.inchesToMeters(17.0),
-      Units.inchesToMeters(18.5),
-      Units.inchesToMeters(25.0),
-      Units.inchesToMeters(18.0),
-      Units.inchesToMeters(25.0),
-      Double.NaN,
-      Double.NaN,
-      Double.NaN,
-      Double.NaN,
-      Transform2d.kZero,
-      Transform2d.kZero),
   WORLDS(
-      Units.inchesToMeters(-6.5),
-      Units.inchesToMeters(6.5),
-      Units.inchesToMeters(17.0),
-      Units.inchesToMeters(18.5),
-      Units.inchesToMeters(25.0),
-      Units.inchesToMeters(18.25),
-      Units.inchesToMeters(22.0),
-      Units.inchesToMeters(23.5),
-      Units.inchesToMeters(24.0),
-      Units.inchesToMeters(44.0),
-      Units.inchesToMeters(40.0),
+      Units.inchesToMeters(-6.5), // tagToReefLeft
+      Units.inchesToMeters(6.5), // tagToReefRight
+      Units.inchesToMeters(17.0), // l2ReefOffsetMeters
+      Units.inchesToMeters(18.5), // l4ReefOffsetMeters
+      Units.inchesToMeters(25.0), // elevatorDownOffsetMeters
+      Units.inchesToMeters(18.25), // hpsOffsetMeters
+      Units.inchesToMeters(22.0), // hpsSideOffsetMeters
+      Units.inchesToMeters(23.5), // algaeOffsetMeters
+      Units.inchesToMeters(24.0), // cageBackOffset
+      Units.inchesToMeters(44.0), // cageSideOffset
+      Units.inchesToMeters(40.0), // bargeShotOffset
       new Transform2d(
-          Units.inchesToMeters(22), Units.inchesToMeters(2), Rotation2d.fromDegrees(180 + 30)),
+          Units.inchesToMeters(22),
+          Units.inchesToMeters(2),
+          Rotation2d.fromDegrees(180 + 30)), // leftL1
       new Transform2d(
-          Units.inchesToMeters(22), Units.inchesToMeters(-1), Rotation2d.fromDegrees(180 - 30)));
+          Units.inchesToMeters(22),
+          Units.inchesToMeters(-1),
+          Rotation2d.fromDegrees(180 - 30))); // rightL1
 
   /** Distance from the center of the April Tag on the Face to the center of the Pole */
   public final double tagToReefLeft;

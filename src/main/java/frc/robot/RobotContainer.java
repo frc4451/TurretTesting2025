@@ -106,7 +106,7 @@ public class RobotContainer {
                 () -> -controller.getLeftXSquared(),
                 () -> -controller.getRightXSquared()));
 
-    controller.b().onTrue(superS.setModeCommand(SuperStructureModes.MINUPOS));
+    controller.b().onTrue(superS.setModeCommand(SuperStructureModes.MINPOS));
     controller.y().onTrue(superS.setModeCommand(SuperStructureModes.MAXPOS));
   }
 }

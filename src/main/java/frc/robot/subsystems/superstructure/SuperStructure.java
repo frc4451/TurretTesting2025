@@ -20,7 +20,7 @@ public class SuperStructure extends SubsystemBase {
 
   private final Turret turret;
 
-  private SuperStructureModes currentMode = SuperStructureModes.MINUPOS;
+  private SuperStructureModes currentMode = SuperStructureModes.MINPOS;
 
   private boolean isAtMode = false;
 
