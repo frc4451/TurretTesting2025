@@ -7,10 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 public class TurretConstants {
-  public static final int canId = 5;
+  public static final int canId = 6;
 
   public static final DCMotor gearbox = DCMotor.getFalcon500Foc(1);
-  public static final double reduction = 15.0;
+  public static final double reduction = 5 * (216 / 24);
   public static final double moi = 0.000002;
 
   public static final boolean invert = true;
@@ -33,7 +33,7 @@ public class TurretConstants {
           .withKV(0.1)
           .withKA(0.0)
           // feedback
-          .withKP(1.25)
+          .withKP(2.0)
           .withKI(0.0)
           .withKD(0.1);
 

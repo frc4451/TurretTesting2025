@@ -111,10 +111,12 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Set up the controls for the Turret Here
-    controller.leftX().whileTrue(superStructure.turretManualCommand(() -> controller.getLeftX()));
+    // controller.leftX().whileTrue(superStructure.turretManualCommand(() ->
+    // controller.getLeftX()));
     controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.MINIMUM));
     controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.MAXIMUM));
+    controller.x().onTrue(superStructure.setModeCommand(SuperStructureModes.AUTOAIMTURRET));
 
-    controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
+    // controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
   }
 }
