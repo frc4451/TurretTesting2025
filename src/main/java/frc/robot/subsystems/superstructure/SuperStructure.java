@@ -23,7 +23,7 @@ public class SuperStructure extends SubsystemBase {
 
   private final Turret turret;
 
-  private SuperStructureModes currentMode = SuperStructureModes.MINIMUM;
+  private SuperStructureModes currentMode = SuperStructureModes.MANUAL;
 
   private boolean isAtMode = false;
 
@@ -72,9 +72,11 @@ public class SuperStructure extends SubsystemBase {
       case MINIMUM:
       case MAXIMUM:
         turret.setGoal(currentMode.turretPosition);
+        break;
       case AUTOAIMTURRET:
-      default:
         handleTurretRotateToReefWithoutLimits();
+      case MANUAL:
+      default:
         break;
     }
 

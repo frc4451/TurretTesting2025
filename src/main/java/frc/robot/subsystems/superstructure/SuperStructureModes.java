@@ -6,7 +6,8 @@ import frc.robot.subsystems.superstructure.turret.TurretConstants;
 public enum SuperStructureModes {
   AUTOAIMTURRET(Rotation2d.kZero),
   MINIMUM(TurretConstants.minimumPosition),
-  MAXIMUM(TurretConstants.maximumPosition);
+  MAXIMUM(TurretConstants.maximumPosition),
+  MANUAL(Rotation2d.kZero);
 
   public final Rotation2d turretPosition;
 
