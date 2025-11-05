@@ -71,10 +71,13 @@ public class SuperStructure extends SubsystemBase {
     switch (currentMode) {
       case MINIMUM:
       case MAXIMUM:
+      case L180:
+      case R180:
         turret.setGoal(currentMode.turretPosition);
         break;
       case AUTOAIMTURRET:
         handleTurretRotateToReefWithoutLimits();
+        break;
       case MANUAL:
       default:
         break;

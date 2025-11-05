@@ -2,7 +2,6 @@ package frc.robot.subsystems.superstructure.turret;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 
@@ -10,7 +9,7 @@ public class TurretConstants {
   public static final int canId = 6;
 
   public static final DCMotor gearbox = DCMotor.getFalcon500Foc(1);
-  public static final double reduction = 5 * (216 / 24);
+  public static final double reduction = 25 * (216 / 24);
   public static final double moi = 0.000002;
 
   public static final boolean invert = true;
@@ -27,15 +26,13 @@ public class TurretConstants {
   public static final Slot0Configs gains =
       new Slot0Configs()
           // feedforward
-          .withKG(0.3)
-          .withGravityType(GravityTypeValue.Elevator_Static)
-          .withKS(0.15)
-          .withKV(0.1)
+          .withKS(0.05)
+          .withKV(0.05)
           .withKA(0.0)
           // feedback
-          .withKP(2.0)
+          .withKP(1)
           .withKI(0.0)
-          .withKD(0.1);
+          .withKD(0.0);
 
   public static final MotionMagicConfigs mmConfig =
       new MotionMagicConfigs()

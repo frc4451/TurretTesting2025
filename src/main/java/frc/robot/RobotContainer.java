@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.bobot_state.BobotState;
 import frc.robot.subsystems.superstructure.SuperStructure;
+import frc.robot.subsystems.superstructure.SuperStructureModes;
 import frc.robot.util.CommandCustomXboxController;
 
 /**
@@ -104,13 +105,14 @@ public class RobotContainer {
     // Set up the controls for the Turret Here
     // controller.leftX().whileTrue(superStructure.turretManualCommand(() ->
     // controller.getLeftX()));
-    // controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.MINIMUM));
-    // controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.MAXIMUM));
-    // controller.x().onTrue(superStructure.setModeCommand(SuperStructureModes.AUTOAIMTURRET));
+    controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.L180));
+    controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.R180));
 
     // This is all that's needed for a demonstation
-    controller.leftX().whileTrue(superStructure.turretManualCommand(() -> controller.getLeftX()));
-
+    controller
+        .leftX()
+        .whileTrue(superStructure.turretManualCommand(() -> controller.getLeftXSquared() * 6))
+        .onTrue(superStructure.setModeCommand(SuperStructureModes.MANUAL));
     // controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
   }
 }
