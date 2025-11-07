@@ -108,6 +108,9 @@ public class RobotContainer {
     controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.L180));
     controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.R180));
 
+    controller.leftBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.MAXIMUM));
+    controller.rightBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.MINIMUM));
+
     // This is all that's needed for a demonstation
     controller
         .leftX()

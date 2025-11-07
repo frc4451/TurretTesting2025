@@ -9,7 +9,12 @@ public class TurretConstants {
   public static final int canId = 6;
 
   public static final DCMotor gearbox = DCMotor.getFalcon500Foc(1);
-  public static final double reduction = 25 * (216 / 24);
+  
+  // Demonstration numbers
+  public static final double reduction = 5 * (216 / 24);
+  
+  // Actual test board values
+  // public static final double reduction = 25 * (216 / 24);
   public static final double moi = 0.000002;
 
   public static final boolean invert = true;

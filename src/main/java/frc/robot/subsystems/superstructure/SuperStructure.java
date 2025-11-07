@@ -2,6 +2,7 @@ package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,7 @@ import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardContr
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
 import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
+import frc.robot.subsystems.superstructure.mechanism.SuperStructureMechanism;
 import frc.robot.subsystems.superstructure.turret.Turret;
 import frc.robot.subsystems.superstructure.turret.TurretConstants;
 import java.util.function.DoubleSupplier;
@@ -22,6 +24,11 @@ public class SuperStructure extends SubsystemBase {
   private final String name = "Superstructure";
 
   private final Turret turret;
+
+  private final SuperStructureMechanism goalMechanism =
+      new SuperStructureMechanism("Goal", Color.kLightGreen, 10.0);
+  private final SuperStructureMechanism measuredMechanism =
+      new SuperStructureMechanism("Measured", Color.kDarkGreen, 3.0);
 
   private SuperStructureModes currentMode = SuperStructureModes.MANUAL;
 
@@ -92,6 +99,9 @@ public class SuperStructure extends SubsystemBase {
     Logger.recordOutput(name + "/IsTurretAlignedWithGoal", isTurretAligned());
 
     turret.periodic();
+
+    measuredMechanism.update(turret.getPosition());
+    goalMechanism.update(turret.getGoalPosition());
   }
 
   public Trigger isAtMode() {
