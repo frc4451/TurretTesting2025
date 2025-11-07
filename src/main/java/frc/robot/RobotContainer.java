@@ -107,6 +107,7 @@ public class RobotContainer {
     // controller.getLeftX()));
     controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.L180));
     controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.R180));
+    controller.x().onTrue(superStructure.TreeRotate());
 
     controller.leftBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.MAXIMUM));
     controller.rightBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.MINIMUM));

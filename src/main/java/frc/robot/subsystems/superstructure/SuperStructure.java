@@ -122,6 +122,12 @@ public class SuperStructure extends SubsystemBase {
     return Commands.runOnce(() -> setCurrentMode(nextMode));
   }
 
+  public Command TreeRotate() {
+    return Commands.repeatingSequence(
+        Commands.deadline(Commands.waitSeconds(95), setModeCommand(SuperStructureModes.R180)),
+        Commands.deadline(Commands.waitSeconds(95), setModeCommand(SuperStructureModes.L180)));
+  }
+
   private Rotation2d getTargetRotation() {
     Rotation2d tagRotation = FieldUtils.getClosestReef().tag.pose().getRotation().toRotation2d();
     Rotation2d targetRotation = tagRotation.plus(Rotation2d.kPi);
