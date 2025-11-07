@@ -36,7 +36,7 @@ public class TurretConstants {
 
   public static final MotionMagicConfigs mmConfig =
       new MotionMagicConfigs()
-          .withMotionMagicCruiseVelocity(reduction * 3.0 / 2.0)
+          .withMotionMagicCruiseVelocity(5 * reduction)
           .withMotionMagicAcceleration(4.5 * reduction)
           .withMotionMagicJerk(20 * reduction);
 

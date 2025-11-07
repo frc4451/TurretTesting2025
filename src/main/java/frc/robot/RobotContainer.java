@@ -107,6 +107,7 @@ public class RobotContainer {
     // controller.getLeftX()));
     controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.L180));
     controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.R180));
+    controller.x().onTrue(superStructure.TreeRotate());
 
     // This is all that's needed for a demonstation
     controller
