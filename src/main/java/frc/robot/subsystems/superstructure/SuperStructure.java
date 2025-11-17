@@ -13,6 +13,7 @@ import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardContr
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
 import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
+import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXS;
 import frc.robot.subsystems.superstructure.turret.Turret;
 import frc.robot.subsystems.superstructure.turret.TurretConstants;
 import java.util.function.DoubleSupplier;
@@ -24,6 +25,7 @@ public class SuperStructure extends SubsystemBase {
   private final Turret turret;
 
   private SuperStructureModes currentMode = SuperStructureModes.MANUAL;
+  private SuperStructureModes treeMode = SuperStructureModes.L180;
 
   private boolean isAtMode = false;
 
@@ -73,10 +75,24 @@ public class SuperStructure extends SubsystemBase {
       case MAXIMUM:
       case L180:
       case R180:
+      case L90:
+      case R90:
         turret.setGoal(currentMode.turretPosition);
         break;
       case AUTOAIMTURRET:
         handleTurretRotateToReefWithoutLimits();
+        break;
+      case TreeRotate:
+        switch (treeMode) {
+          case L180:
+          case R180:
+          case L90:
+          case R90:
+            turret.setGoal(treeMode.turretPosition);
+            break;
+          default:
+            break;
+        }
         break;
       case MANUAL:
       default:
@@ -112,11 +128,25 @@ public class SuperStructure extends SubsystemBase {
     return Commands.runOnce(() -> setCurrentMode(nextMode));
   }
 
-  public Command TreeRotate() {
-    return Commands.repeatingSequence(
-        Commands.deadline(Commands.waitSeconds(95), setModeCommand(SuperStructureModes.R180)),
-        Commands.deadline(Commands.waitSeconds(95), setModeCommand(SuperStructureModes.L180)));
+  private void setTreeMode(SuperStructureModes nextMode) {
+    if (treeMode != nextMode) {
+      treeMode = nextMode;
+    }
   }
+
+  public Command setTreeCommand(SuperStructureModes nextMode) {
+    return Commands.runOnce(() -> setTreeMode(nextMode));
+  }
+
+  // public Command TreeRotate() {
+  //   return Commands.sequence(
+  //       Commands.deadline(Commands.waitSeconds(5), setModeCommand(SuperStructureModes.L180)),
+  //       Commands.repeatingSequence(
+  //           Commands.deadline(Commands.waitSeconds(10),
+  // setModeCommand(SuperStructureModes.R180)),
+  //           Commands.deadline(Commands.waitSeconds(10),
+  // setModeCommand(SuperStructureModes.L180))));
+  // }
 
   private Rotation2d getTargetRotation() {
     Rotation2d tagRotation = FieldUtils.getClosestReef().tag.pose().getRotation().toRotation2d();
@@ -198,5 +228,9 @@ public class SuperStructure extends SubsystemBase {
             () -> {
               Logger.recordOutput(name + "/IsShooting", false);
             });
+  }
+
+  public Command runTVelocity(double velocity) {
+    return Commands.run(() -> turret.setVelocity(velocity), this);
   }
 }

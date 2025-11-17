@@ -9,7 +9,8 @@ public class TurretConstants {
   public static final int canId = 6;
 
   public static final DCMotor gearbox = DCMotor.getFalcon500Foc(1);
-  public static final double reduction = 25 * (216 / 24);
+  // public static final double reduction = 25.0 * (216.0 / 24.0); // for REAL turret
+  public static final double reduction = 1; // for minion motor
   public static final double moi = 0.000002;
 
   public static final boolean invert = true;
@@ -30,15 +31,16 @@ public class TurretConstants {
           .withKV(0.05)
           .withKA(0.0)
           // feedback
-          .withKP(1)
+          .withKP(1.0)
           .withKI(0.0)
           .withKD(0.0);
 
   public static final MotionMagicConfigs mmConfig =
       new MotionMagicConfigs()
-          .withMotionMagicCruiseVelocity(5 * reduction)
+          .withMotionMagicCruiseVelocity(5.0 * reduction)
+          // .withMotionMagicCruiseVelocity(0.01 * reduction)
           .withMotionMagicAcceleration(4.5 * reduction)
-          .withMotionMagicJerk(20 * reduction);
+          .withMotionMagicJerk(20.0 * reduction);
 
   public static final boolean foc = true;
 }

@@ -103,12 +103,16 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Set up the controls for the Turret Here
-    // controller.leftX().whileTrue(superStructure.turretManualCommand(() ->
-    // controller.getLeftX()));
-    controller.a().onTrue(superStructure.setModeCommand(SuperStructureModes.L180));
-    controller.b().onTrue(superStructure.setModeCommand(SuperStructureModes.R180));
-    controller.x().onTrue(superStructure.TreeRotate());
-
+    controller.b().onTrue(superStructure.setTreeCommand(SuperStructureModes.R180));
+    controller.leftBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.L90));
+    controller.rightBumper().onTrue(superStructure.runTVelocity(1));
+    // if (controller.isConnected()) {
+    //   controller.x().onTrue(superStructure.TreeRotate());
+    // } else if (!controller.isConnected()) {
+    //   superStructure.TreeRotate();
+    // }
+    controller.x().onTrue(superStructure.setTreeCommand(SuperStructureModes.L180));
+    controller.y().onTrue(superStructure.setModeCommand(SuperStructureModes.TreeRotate));
     // This is all that's needed for a demonstation
     controller
         .leftX()

@@ -49,6 +49,10 @@ public class Turret extends SingleRoller {
     io.setGoal(angle.getRotations());
   }
 
+  public void setVelocity(double velocity) {
+    io.setVelocity(velocity);
+  }
+
   public Rotation2d getGoalPosition() {
     return Rotation2d.fromRotations(inputs.positionGoalRotations);
   }

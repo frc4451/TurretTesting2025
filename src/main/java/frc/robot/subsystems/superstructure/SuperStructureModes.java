@@ -9,8 +9,11 @@ public enum SuperStructureModes {
   MAXIMUM(TurretConstants.maximumPosition),
   MANUAL(Rotation2d.kZero),
   // christmas tree stuff
-  L180(Rotation2d.fromDegrees(180)),
-  R180(Rotation2d.fromDegrees(-180));
+  L180(Rotation2d.fromDegrees(-180)),
+  R180(Rotation2d.fromDegrees(180)),
+  L90(Rotation2d.kCCW_90deg),
+  R90(Rotation2d.kCW_90deg),
+  TreeRotate(Rotation2d.kZero);
 
   public final Rotation2d turretPosition;
 

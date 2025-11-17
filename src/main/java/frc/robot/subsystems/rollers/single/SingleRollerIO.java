@@ -25,6 +25,9 @@ public interface SingleRollerIO {
   /** Run roller at set voltage */
   public default void runVolts(double volts) {}
 
+  /** Run roller at set Velocity */
+  public default void setVelocity(double velocity) {}
+
   /** Set goal position of roller to position */
   public default void setGoal(double positionRotations) {}
 
