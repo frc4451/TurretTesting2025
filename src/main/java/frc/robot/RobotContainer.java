@@ -60,7 +60,6 @@ public class RobotContainer {
         //         new ModuleIOSim(),
         //         new ModuleIOSim(),
         //         new ModuleIOSim());
-
         break;
 
       case REPLAY:
@@ -105,7 +104,7 @@ public class RobotContainer {
     // Set up the controls for the Turret Here
     controller.b().onTrue(superStructure.setTreeCommand(SuperStructureModes.R180));
     controller.leftBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.L90));
-    controller.rightBumper().onTrue(superStructure.runTVelocity(1));
+    // controller.rightBumper().onTrue(superStructure.runTVelocity(1));
     // if (controller.isConnected()) {
     //   controller.x().onTrue(superStructure.TreeRotate());
     // } else if (!controller.isConnected()) {
@@ -119,5 +118,10 @@ public class RobotContainer {
         .whileTrue(superStructure.turretManualCommand(() -> controller.getLeftXSquared() * 6))
         .onTrue(superStructure.setModeCommand(SuperStructureModes.MANUAL));
     // controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
+
+    controller.povUp().onTrue(superStructure.setFlywheelVelocity(10));
+    controller.povDown().onTrue(superStructure.setFlywheelVelocity(-10));
+    controller.povLeft().onTrue(superStructure.setFlywheelVoltage(-6));
+    controller.povRight().onTrue(superStructure.setFlywheelVoltage(6));
   }
 }

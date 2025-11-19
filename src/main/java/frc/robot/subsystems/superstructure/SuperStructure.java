@@ -9,11 +9,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.bobot_state.BobotState;
 import frc.robot.field.FieldUtils;
+import frc.robot.subsystems.flywheel.Flywheel;
+import frc.robot.subsystems.flywheel.FlywheelConstants;
 import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardController;
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
 import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
-import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXS;
+import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXSim;
 import frc.robot.subsystems.superstructure.turret.Turret;
 import frc.robot.subsystems.superstructure.turret.TurretConstants;
 import java.util.function.DoubleSupplier;
@@ -23,6 +25,7 @@ public class SuperStructure extends SubsystemBase {
   private final String name = "Superstructure";
 
   private final Turret turret;
+  private final Flywheel flywheel;
 
   private SuperStructureModes currentMode = SuperStructureModes.MANUAL;
   private SuperStructureModes treeMode = SuperStructureModes.L180;
@@ -31,6 +34,7 @@ public class SuperStructure extends SubsystemBase {
 
   public SuperStructure() {
     SingleRollerIO turretIO;
+    SingleRollerIO flywheelIO;
 
     switch (Constants.currentMode) {
       case REAL:
@@ -44,6 +48,16 @@ public class SuperStructure extends SubsystemBase {
                 TurretConstants.foc,
                 TurretConstants.gains,
                 TurretConstants.mmConfig);
+        flywheelIO =
+            new SingleRollerIOTalonFX(
+                FlywheelConstants.canId,
+                FlywheelConstants.reduction,
+                FlywheelConstants.currentLimitAmps,
+                FlywheelConstants.invert,
+                FlywheelConstants.isBrakeMode,
+                FlywheelConstants.foc,
+                FlywheelConstants.gains,
+                FlywheelConstants.mmConfig);
         break;
 
       case SIM:
@@ -55,15 +69,32 @@ public class SuperStructure extends SubsystemBase {
                 TurretConstants.gains,
                 TurretConstants.mmConfig,
                 new EmptyFeedforwardController());
+        flywheelIO =
+            new SingleRollerIOTalonFXSim(
+                FlywheelConstants.canId,
+                FlywheelConstants.reduction,
+                FlywheelConstants.currentLimitAmps,
+                FlywheelConstants.invert,
+                FlywheelConstants.isBrakeMode,
+                FlywheelConstants.foc,
+                FlywheelConstants.gains,
+                FlywheelConstants.mmConfig,
+                FlywheelConstants.gearbox,
+                FlywheelConstants.moi);
         break;
 
       case REPLAY:
       default:
         turretIO = new SingleRollerIO() {};
+        flywheelIO = new SingleRollerIO() {};
         break;
     }
 
     turret = new Turret(name + "/Turret", turretIO);
+
+    flywheel =
+        new Flywheel(
+            name + "/MinionFlywheel", flywheelIO, SuperStructureConstants.flywheelRadiusMeters);
   }
 
   @Override
@@ -108,6 +139,9 @@ public class SuperStructure extends SubsystemBase {
     Logger.recordOutput(name + "/IsTurretAlignedWithGoal", isTurretAligned());
 
     turret.periodic();
+
+    // Let the Flywheel handle whatever it needs to do separate of the Turret
+    flywheel.periodic();
   }
 
   public Trigger isAtMode() {
@@ -230,7 +264,11 @@ public class SuperStructure extends SubsystemBase {
             });
   }
 
-  public Command runTVelocity(double velocity) {
-    return Commands.run(() -> turret.setVelocity(velocity), this);
+  public Command setFlywheelVelocity(double velocityMetersPerSec) {
+    return runOnce(() -> flywheel.setVelocity(velocityMetersPerSec));
+  }
+
+  public Command setFlywheelVoltage(double volts) {
+    return run(() -> flywheel.runVolts(volts));
   }
 }

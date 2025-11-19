@@ -5,6 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -19,24 +20,26 @@ import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants;
 
 public class SingleRollerIOTalonFX implements SingleRollerIO {
-  private final TalonFX talon;
-  private final double reduction;
+  protected final TalonFX talon;
+  protected final double reduction;
 
-  private final StatusSignal<Angle> position;
-  private final StatusSignal<AngularVelocity> velocity;
-  private final StatusSignal<Voltage> voltage;
-  private final StatusSignal<Current> supplyCurrentAmps;
-  private final StatusSignal<Current> torqueCurrentAmps;
-  private final StatusSignal<Temperature> tempCelsius;
+  protected final StatusSignal<Angle> position;
+  protected final StatusSignal<AngularVelocity> velocity;
+  protected final StatusSignal<Voltage> voltage;
+  protected final StatusSignal<Current> supplyCurrentAmps;
+  protected final StatusSignal<Current> torqueCurrentAmps;
+  protected final StatusSignal<Temperature> tempCelsius;
 
-  private final StatusSignal<Double> positionSetpointRotations;
-  private final StatusSignal<Double> velocitySetpointRotationsPerSec;
+  protected final StatusSignal<Double> positionSetpointRotations;
+  protected final StatusSignal<Double> velocitySetpointRotationsPerSec;
 
-  private final MotionMagicVoltage mmVoltage;
-  private final VoltageOut voltageOut;
-  private final NeutralOut neutralOut = new NeutralOut();
+  protected final MotionMagicVoltage mmVoltage;
+  protected final MotionMagicVelocityVoltage mmVelocityVoltage;
 
-  private double positionGoalRotations = 0;
+  protected final VoltageOut voltageOut;
+  protected final NeutralOut neutralOut = new NeutralOut();
+
+  protected double positionGoalRotations = 0;
 
   public SingleRollerIOTalonFX(
       int canId,
@@ -53,6 +56,7 @@ public class SingleRollerIOTalonFX implements SingleRollerIO {
 
     voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0).withEnableFOC(foc);
     mmVoltage = new MotionMagicVoltage(0.0).withUpdateFreqHz(0).withEnableFOC(foc);
+    mmVelocityVoltage = new MotionMagicVelocityVoltage(0).withSlot(0).withEnableFOC(foc);
 
     position = talon.getPosition();
     velocity = talon.getVelocity();
@@ -122,6 +126,11 @@ public class SingleRollerIOTalonFX implements SingleRollerIO {
   @Override
   public void runVolts(double volts) {
     talon.setControl(voltageOut.withOutput(volts));
+  }
+
+  @Override
+  public void setVelocity(double velocityRotationsPerSec) {
+    talon.setControl(mmVelocityVoltage.withVelocity(velocityRotationsPerSec * reduction));
   }
 
   @Override
