@@ -15,7 +15,8 @@ import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardContr
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
 import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
-import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXSim;
+import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXS;
+import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXSSim;
 import frc.robot.subsystems.superstructure.turret.Turret;
 import frc.robot.subsystems.superstructure.turret.TurretConstants;
 import java.util.function.DoubleSupplier;
@@ -49,7 +50,7 @@ public class SuperStructure extends SubsystemBase {
                 TurretConstants.gains,
                 TurretConstants.mmConfig);
         flywheelIO =
-            new SingleRollerIOTalonFX(
+            new SingleRollerIOTalonFXS(
                 FlywheelConstants.canId,
                 FlywheelConstants.reduction,
                 FlywheelConstants.currentLimitAmps,
@@ -70,7 +71,7 @@ public class SuperStructure extends SubsystemBase {
                 TurretConstants.mmConfig,
                 new EmptyFeedforwardController());
         flywheelIO =
-            new SingleRollerIOTalonFXSim(
+            new SingleRollerIOTalonFXSSim(
                 FlywheelConstants.canId,
                 FlywheelConstants.reduction,
                 FlywheelConstants.currentLimitAmps,

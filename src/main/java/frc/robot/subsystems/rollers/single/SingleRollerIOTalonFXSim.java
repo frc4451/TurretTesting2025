@@ -16,6 +16,7 @@ public class SingleRollerIOTalonFXSim extends SingleRollerIOTalonFX {
   /** Motion Magic does _not_ work in Sim, so we use Position Voltage in the meantime */
   private final PositionVoltage positionVoltage;
 
+  /** Motion Magic does _not_ work in Sim, so we use Velocity Voltage in the meantime */
   private final VelocityVoltage velocityVoltage;
 
   public SingleRollerIOTalonFXSim(
