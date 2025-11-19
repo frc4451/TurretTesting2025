@@ -12,8 +12,8 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
@@ -50,7 +50,8 @@ public class SingleRollerIOTalonFXS implements SingleRollerIO {
       boolean isBrakeMode,
       boolean foc,
       Slot0Configs gains,
-      MotionMagicConfigs mmConfig) {
+      MotionMagicConfigs mmConfig,
+      MotorArrangementValue motorType) {
     this.reduction = reduction;
 
     talon = new TalonFXS(canId, Constants.alternateCanBus);
@@ -79,6 +80,7 @@ public class SingleRollerIOTalonFXS implements SingleRollerIO {
         .withSupplyCurrentLimit(currentLimitAmps);
     cfg.Slot0 = gains;
     cfg.MotionMagic = mmConfig;
+    cfg.Commutation.MotorArrangement = motorType;
     // spotless:on
 
     BaseStatusSignal.setUpdateFrequencyForAll(
@@ -135,14 +137,8 @@ public class SingleRollerIOTalonFXS implements SingleRollerIO {
   //   }
   @Override
   public void setVelocity(double velocity) {
-    // Convert degrees/sec to rotations/sec
-    double velocityRadPerSec = Units.degreesToRadians(velocity);
-    double velocityRotations = velocityRadPerSec / (2.0 * Math.PI);
     VelocityVoltage velocityVoltage = new VelocityVoltage(0).withSlot(0);
-
-    // double ffVolts = feedforward.calculate(getVelocity(), acceleration);
-    // motor.setControl(velocityRequest.withVelocity(velocityRotations).withFeedForward(ffVolts));
-    talon.setControl(velocityVoltage.withVelocity(velocityRotations));
+    talon.setControl(velocityVoltage.withVelocity(velocity));
   }
 
   @Override

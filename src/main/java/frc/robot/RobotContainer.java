@@ -105,7 +105,7 @@ public class RobotContainer {
     // Set up the controls for the Turret Here
     controller.b().onTrue(superStructure.setTreeCommand(SuperStructureModes.R180));
     controller.leftBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.L90));
-    controller.rightBumper().onTrue(superStructure.runTVelocity(1));
+    controller.rightBumper().onTrue(superStructure.setModeCommand(SuperStructureModes.R90));
     // if (controller.isConnected()) {
     //   controller.x().onTrue(superStructure.TreeRotate());
     // } else if (!controller.isConnected()) {
@@ -116,7 +116,7 @@ public class RobotContainer {
     // This is all that's needed for a demonstation
     controller
         .leftX()
-        .whileTrue(superStructure.turretManualCommand(() -> controller.getLeftXSquared() * 6))
+        .whileTrue(superStructure.turretManualCommand(() -> controller.getLeftXSquared() / 6))
         .onTrue(superStructure.setModeCommand(SuperStructureModes.MANUAL));
     // controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
   }

@@ -6,9 +6,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 
 public class TurretConstants {
-  public static final int canId = 6;
+  public static final int canId = 10;
 
-  public static final DCMotor gearbox = DCMotor.getFalcon500Foc(1);
+  public static final DCMotor gearbox = DCMotor.getKrakenX60(1);
   // public static final double reduction = 25.0 * (216.0 / 24.0); // for REAL turret
   public static final double reduction = 1; // for minion motor
   public static final double moi = 0.000002;
@@ -27,8 +27,8 @@ public class TurretConstants {
   public static final Slot0Configs gains =
       new Slot0Configs()
           // feedforward
-          .withKS(0.05)
-          .withKV(0.05)
+          .withKS(0.1)
+          .withKV(0.1)
           .withKA(0.0)
           // feedback
           .withKP(1.0)

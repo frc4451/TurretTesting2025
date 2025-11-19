@@ -1,5 +1,6 @@
 package frc.robot.subsystems.superstructure;
 
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +13,6 @@ import frc.robot.field.FieldUtils;
 import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardController;
 import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
-import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
 import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXS;
 import frc.robot.subsystems.superstructure.turret.Turret;
 import frc.robot.subsystems.superstructure.turret.TurretConstants;
@@ -35,7 +35,7 @@ public class SuperStructure extends SubsystemBase {
     switch (Constants.currentMode) {
       case REAL:
         turretIO =
-            new SingleRollerIOTalonFX(
+            new SingleRollerIOTalonFXS(
                 TurretConstants.canId,
                 TurretConstants.reduction,
                 TurretConstants.currentLimitAmps,
@@ -43,7 +43,8 @@ public class SuperStructure extends SubsystemBase {
                 TurretConstants.isBrakeMode,
                 TurretConstants.foc,
                 TurretConstants.gains,
-                TurretConstants.mmConfig);
+                TurretConstants.mmConfig,
+                MotorArrangementValue.Minion_JST);
         break;
 
       case SIM:
@@ -115,7 +116,8 @@ public class SuperStructure extends SubsystemBase {
   }
 
   public Command turretManualCommand(DoubleSupplier supplier) {
-    return run(() -> turret.runVolts(supplier.getAsDouble())).finallyDo(() -> turret.stop());
+    // return run(() -> turret.runVolts(supplier.getAsDouble())).finallyDo(() -> turret.stop());
+    return run(() -> turret.setVelocity(supplier.getAsDouble())).finallyDo(() -> turret.stop());
   }
 
   private void setCurrentMode(SuperStructureModes nextMode) {
