@@ -9,6 +9,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
+import frc.robot.subsystems.rollers.single.SingleRollerTypes.SingleRollerFXConfig;
 
 public class SingleRollerIOTalonFXSim extends SingleRollerIOTalonFX {
   private final DCMotorSim motorSim;
@@ -20,22 +21,14 @@ public class SingleRollerIOTalonFXSim extends SingleRollerIOTalonFX {
   private final VelocityVoltage velocityVoltage;
 
   public SingleRollerIOTalonFXSim(
-      int canId,
-      double reduction,
-      double currentLimitAmps,
-      boolean invert,
-      boolean isBrakeMode,
-      boolean foc,
-      Slot0Configs gains,
-      MotionMagicConfigs mmConfig,
+    SingleRollerFXConfig config,
       DCMotor dcMotor,
       double moi) {
-    super(canId, reduction, currentLimitAmps, invert, isBrakeMode, foc, gains, mmConfig);
-
+    super(config);
     motorSim =
         new DCMotorSim(LinearSystemId.createDCMotorSystem(dcMotor, 0.00002, reduction), dcMotor);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0).withEnableFOC(foc);
-    positionVoltage = new PositionVoltage(0).withSlot(0).withEnableFOC(foc);
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withEnableFOC(config.foc());
+    positionVoltage = new PositionVoltage(0).withSlot(0).withEnableFOC(config.foc());
   }
 
   @Override

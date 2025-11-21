@@ -3,7 +3,6 @@ package frc.robot.subsystems.flywheel;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -30,17 +29,18 @@ public class Flywheel extends SingleRoller {
     this.radiusMeters = radiusMeters;
 
     if (RobotBase.isSimulation()) {
-      flywheelSim =
-          Optional.of(
-              new FlywheelSim(
-                  LinearSystemId.createFlywheelSystem(
-                      FlywheelConstants.gearbox,
-                      FlywheelConstants.moi,
-                      FlywheelConstants.reduction),
-                  FlywheelConstants.gearbox));
+      // flywheelSim =
+      //     Optional.of(
+      //         new FlywheelSim(
+      //             LinearSystemId.createFlywheelSystem(
+      //                 FlywheelConstants.gearbox,
+      //                 FlywheelConstants.moi,
+      //                 FlywheelConstants.reduction),
+      //             FlywheelConstants.gearbox));
     } else {
-      flywheelSim = Optional.empty();
+      // flywheelSim = Optional.empty();
     }
+    flywheelSim = Optional.empty();
   }
 
   @Override
