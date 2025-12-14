@@ -1,16 +1,14 @@
-package frc.robot.subsystems.rollers.single;
+package org.robotzgarage.frc2026.subsystems.rollers.single;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
+import org.robotzgarage.frc2026.util.MotorConfigs.TalonFXSConfig;
 
-public class SingleRollerIOTalonFXSim extends SingleRollerIOTalonFX {
+public class SingleRollerIOSimTalonFXS extends SingleRollerIOTalonFXS {
   private final DCMotorSim motorSim;
 
   /** Motion Magic does _not_ work in Sim, so we use Position Voltage in the meantime */
@@ -19,23 +17,15 @@ public class SingleRollerIOTalonFXSim extends SingleRollerIOTalonFX {
   /** Motion Magic does _not_ work in Sim, so we use Velocity Voltage in the meantime */
   private final VelocityVoltage velocityVoltage;
 
-  public SingleRollerIOTalonFXSim(
-      int canId,
-      double reduction,
-      double currentLimitAmps,
-      boolean invert,
-      boolean isBrakeMode,
-      boolean foc,
-      Slot0Configs gains,
-      MotionMagicConfigs mmConfig,
-      DCMotor dcMotor,
-      double moi) {
-    super(canId, reduction, currentLimitAmps, invert, isBrakeMode, foc, gains, mmConfig);
+  public SingleRollerIOSimTalonFXS(TalonFXSConfig config) {
+    super(config);
 
     motorSim =
-        new DCMotorSim(LinearSystemId.createDCMotorSystem(dcMotor, 0.00002, reduction), dcMotor);
-    velocityVoltage = new VelocityVoltage(0).withSlot(0).withEnableFOC(foc);
-    positionVoltage = new PositionVoltage(0).withSlot(0).withEnableFOC(foc);
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(config.dcMotor(), config.moi(), reduction),
+            config.dcMotor());
+    velocityVoltage = new VelocityVoltage(0).withSlot(0).withEnableFOC(config.foc());
+    positionVoltage = new PositionVoltage(0).withSlot(0).withEnableFOC(config.foc());
   }
 
   @Override

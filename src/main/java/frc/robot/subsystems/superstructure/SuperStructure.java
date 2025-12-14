@@ -9,24 +9,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.bobot_state.BobotState;
 import frc.robot.field.FieldUtils;
-import frc.robot.subsystems.flywheel.Flywheel;
-import frc.robot.subsystems.flywheel.FlywheelConstants;
-import frc.robot.subsystems.rollers.feedforward_controller.EmptyFeedforwardController;
-import frc.robot.subsystems.rollers.single.SingleRollerIO;
-import frc.robot.subsystems.rollers.single.SingleRollerIOSim;
-import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFX;
-import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXS;
-import frc.robot.subsystems.rollers.single.SingleRollerIOTalonFXSSim;
 import frc.robot.subsystems.superstructure.turret.Turret;
 import frc.robot.subsystems.superstructure.turret.TurretConstants;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
+import org.robotzgarage.frc2026.subsystems.rollers.single.SingleRollerIO;
+import org.robotzgarage.frc2026.subsystems.rollers.single.SingleRollerIOSimTalonFX;
+import org.robotzgarage.frc2026.subsystems.rollers.single.SingleRollerIOTalonFX;
 
 public class SuperStructure extends SubsystemBase {
   private final String name = "Superstructure";
 
   private final Turret turret;
-  private final Flywheel flywheel;
 
   private SuperStructureModes currentMode = SuperStructureModes.MANUAL;
   private SuperStructureModes treeMode = SuperStructureModes.L180;
@@ -39,63 +33,20 @@ public class SuperStructure extends SubsystemBase {
 
     switch (Constants.currentMode) {
       case REAL:
-        turretIO =
-            new SingleRollerIOTalonFX(
-                TurretConstants.canId,
-                TurretConstants.reduction,
-                TurretConstants.currentLimitAmps,
-                TurretConstants.invert,
-                TurretConstants.isBrakeMode,
-                TurretConstants.foc,
-                TurretConstants.gains,
-                TurretConstants.mmConfig);
-        flywheelIO =
-            new SingleRollerIOTalonFXS(
-                FlywheelConstants.canId,
-                FlywheelConstants.reduction,
-                FlywheelConstants.currentLimitAmps,
-                FlywheelConstants.invert,
-                FlywheelConstants.isBrakeMode,
-                FlywheelConstants.foc,
-                FlywheelConstants.gains,
-                FlywheelConstants.mmConfig);
+        turretIO = new SingleRollerIOTalonFX(TurretConstants.turretTalonFXConfig);
         break;
 
       case SIM:
-        turretIO =
-            new SingleRollerIOSim(
-                TurretConstants.gearbox,
-                TurretConstants.reduction,
-                TurretConstants.moi,
-                TurretConstants.gains,
-                TurretConstants.mmConfig,
-                new EmptyFeedforwardController());
-        flywheelIO =
-            new SingleRollerIOTalonFXSSim(
-                FlywheelConstants.canId,
-                FlywheelConstants.reduction,
-                FlywheelConstants.currentLimitAmps,
-                FlywheelConstants.invert,
-                FlywheelConstants.isBrakeMode,
-                FlywheelConstants.foc,
-                FlywheelConstants.gains,
-                FlywheelConstants.mmConfig,
-                FlywheelConstants.gearbox,
-                FlywheelConstants.moi);
+        turretIO = new SingleRollerIOSimTalonFX(TurretConstants.turretTalonFXConfig);
         break;
 
       case REPLAY:
       default:
         turretIO = new SingleRollerIO() {};
-        flywheelIO = new SingleRollerIO() {};
         break;
     }
 
     turret = new Turret(name + "/Turret", turretIO);
-
-    flywheel =
-        new Flywheel(
-            name + "/MinionFlywheel", flywheelIO, SuperStructureConstants.flywheelRadiusMeters);
   }
 
   @Override
@@ -140,9 +91,6 @@ public class SuperStructure extends SubsystemBase {
     Logger.recordOutput(name + "/IsTurretAlignedWithGoal", isTurretAligned());
 
     turret.periodic();
-
-    // Let the Flywheel handle whatever it needs to do separate of the Turret
-    flywheel.periodic();
   }
 
   public Trigger isAtMode() {
@@ -263,13 +211,5 @@ public class SuperStructure extends SubsystemBase {
             () -> {
               Logger.recordOutput(name + "/IsShooting", false);
             });
-  }
-
-  public Command setFlywheelVelocity(double velocityMetersPerSec) {
-    return runOnce(() -> flywheel.setVelocity(velocityMetersPerSec));
-  }
-
-  public Command setFlywheelVoltage(double volts) {
-    return run(() -> flywheel.runVolts(volts));
   }
 }

@@ -1,15 +1,14 @@
-package frc.robot.subsystems.rollers.single;
+package org.robotzgarage.frc2026.subsystems.rollers.single;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Angle;
@@ -18,9 +17,10 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants;
+import org.robotzgarage.frc2026.util.MotorConfigs.TalonFXSConfig;
 
-public class SingleRollerIOTalonFX implements SingleRollerIO {
-  protected final TalonFX talon;
+public class SingleRollerIOTalonFXS implements SingleRollerIO {
+  protected final TalonFXS talon;
   protected final double reduction;
 
   protected final StatusSignal<Angle> position;
@@ -37,26 +37,20 @@ public class SingleRollerIOTalonFX implements SingleRollerIO {
   protected final MotionMagicVelocityVoltage mmVelocityVoltage;
 
   protected final VoltageOut voltageOut;
+  protected final DutyCycleOut dutyCycle;
   protected final NeutralOut neutralOut = new NeutralOut();
 
   protected double positionGoalRotations = 0;
 
-  public SingleRollerIOTalonFX(
-      int canId,
-      double reduction,
-      double currentLimitAmps,
-      boolean invert,
-      boolean isBrakeMode,
-      boolean foc,
-      Slot0Configs gains,
-      MotionMagicConfigs mmConfig) {
-    this.reduction = reduction;
+  public SingleRollerIOTalonFXS(TalonFXSConfig config) {
+    this.reduction = config.reduction();
 
-    talon = new TalonFX(canId, Constants.alternateCanBus);
+    talon = new TalonFXS(config.canId(), Constants.alternateCanBus);
 
-    voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0).withEnableFOC(foc);
-    mmVoltage = new MotionMagicVoltage(0.0).withUpdateFreqHz(0).withEnableFOC(foc);
-    mmVelocityVoltage = new MotionMagicVelocityVoltage(0).withSlot(0).withEnableFOC(foc);
+    voltageOut = new VoltageOut(0.0).withUpdateFreqHz(0).withEnableFOC(config.foc());
+    dutyCycle = new DutyCycleOut(0).withUpdateFreqHz(0).withEnableFOC(config.foc());
+    mmVoltage = new MotionMagicVoltage(0.0).withUpdateFreqHz(0).withEnableFOC(config.foc());
+    mmVelocityVoltage = new MotionMagicVelocityVoltage(0).withSlot(0).withEnableFOC(config.foc());
 
     position = talon.getPosition();
     velocity = talon.getVelocity();
@@ -68,16 +62,16 @@ public class SingleRollerIOTalonFX implements SingleRollerIO {
     positionSetpointRotations = talon.getClosedLoopReference();
     velocitySetpointRotationsPerSec = talon.getClosedLoopReferenceSlope();
 
-    TalonFXConfiguration cfg = new TalonFXConfiguration();
+    TalonFXSConfiguration cfg = new TalonFXSConfiguration();
     // spotless:off
     cfg.MotorOutput
-        .withInverted(invert ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive)
-        .withNeutralMode(isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        .withInverted(config.invert() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive)
+        .withNeutralMode(config.isBrakeMode() ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     cfg.CurrentLimits
         .withSupplyCurrentLimitEnable(true)
-        .withSupplyCurrentLimit(currentLimitAmps);
-    cfg.Slot0 = gains;
-    cfg.MotionMagic = mmConfig;
+        .withSupplyCurrentLimit(config.currentLimitAmps());
+    cfg.Slot0 = config.gains();
+    cfg.MotionMagic = config.mmConfig();
     // spotless:on
 
     BaseStatusSignal.setUpdateFrequencyForAll(
@@ -128,9 +122,19 @@ public class SingleRollerIOTalonFX implements SingleRollerIO {
     talon.setControl(voltageOut.withOutput(volts));
   }
 
+  //   @Override
+  //   public void setVelocity(double velocity) {
+  //     talon.setControl(dutyCycle.withOutput(velocity * reduction));
+  //   }
   @Override
   public void setVelocity(double velocityRotationsPerSec) {
-    talon.setControl(mmVelocityVoltage.withVelocity(velocityRotationsPerSec * reduction));
+    // Convert degrees/sec to rotations/sec
+    // double velocityRadPerSec = Units.degreesToRadians(velocity);
+    // double velocityRotations = velocityRadPerSec / (2.0 * Math.PI);
+
+    // double ffVolts = feedforward.calculate(getVelocity(), acceleration);
+    // motor.setControl(velocityRequest.withVelocity(velocityRotations).withFeedForward(ffVolts));
+    talon.setControl(mmVelocityVoltage.withVelocity(velocityRotationsPerSec / reduction));
   }
 
   @Override

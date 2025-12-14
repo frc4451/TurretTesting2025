@@ -7,10 +7,10 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import frc.robot.subsystems.rollers.single.SingleRoller;
-import frc.robot.subsystems.rollers.single.SingleRollerIO;
 import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
+import org.robotzgarage.frc2026.subsystems.rollers.single.SingleRoller;
+import org.robotzgarage.frc2026.subsystems.rollers.single.SingleRollerIO;
 
 /** Simulation support for a single motor that only spins. */
 public class Flywheel extends SingleRoller {

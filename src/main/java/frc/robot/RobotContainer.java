@@ -13,7 +13,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.bobot_state.BobotState;
@@ -119,10 +118,5 @@ public class RobotContainer {
         .whileTrue(superStructure.turretManualCommand(() -> controller.getLeftXSquared() * 6))
         .onTrue(superStructure.setModeCommand(SuperStructureModes.MANUAL));
     // controller.start().and(superStructure.isTurretAligned()).onTrue(superStructure.shootCommand());
-
-    controller.povUp().onTrue(superStructure.setFlywheelVelocity(Units.feetToMeters(1)));
-    controller.povDown().onTrue(superStructure.setFlywheelVelocity(Units.feetToMeters(-1)));
-    controller.povLeft().onTrue(superStructure.setFlywheelVoltage(-6));
-    controller.povRight().onTrue(superStructure.setFlywheelVoltage(6));
   }
 }

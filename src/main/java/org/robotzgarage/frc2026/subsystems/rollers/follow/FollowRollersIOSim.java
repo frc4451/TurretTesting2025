@@ -1,4 +1,4 @@
-package frc.robot.subsystems.rollers.follow;
+package org.robotzgarage.frc2026.subsystems.rollers.follow;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -11,7 +11,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
-import frc.robot.subsystems.rollers.feedforward_controller.FeedforwardController;
+import org.robotzgarage.frc2026.subsystems.rollers.feedforward_controller.FeedforwardController;
 
 public class FollowRollersIOSim implements FollowRollersIO {
   private final DCMotorSim leader;

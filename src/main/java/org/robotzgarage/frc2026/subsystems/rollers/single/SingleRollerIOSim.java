@@ -1,17 +1,15 @@
-package frc.robot.subsystems.rollers.single;
+package org.robotzgarage.frc2026.subsystems.rollers.single;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
-import frc.robot.subsystems.rollers.feedforward_controller.FeedforwardController;
+import org.robotzgarage.frc2026.subsystems.rollers.feedforward_controller.FeedforwardController;
+import org.robotzgarage.frc2026.util.MotorConfigs.SimMotorConfig;
 
 public class SingleRollerIOSim implements SingleRollerIO {
   private final DCMotorSim sim;
@@ -22,24 +20,20 @@ public class SingleRollerIOSim implements SingleRollerIO {
 
   private boolean isClosedLoop = false;
 
-  public SingleRollerIOSim(
-      DCMotor motorModel,
-      double reduction,
-      double moi,
-      Slot0Configs gains,
-      MotionMagicConfigs mmConfig,
-      FeedforwardController ff) {
+  public SingleRollerIOSim(SimMotorConfig config) {
     sim =
-        new DCMotorSim(LinearSystemId.createDCMotorSystem(motorModel, moi, reduction), motorModel);
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                config.motorModel(), config.moi(), config.reduction()),
+            config.motorModel());
 
-    this.ff = ff;
+    this.ff = config.ff();
     this.controller =
         new ProfiledPIDController(
-            gains.kP,
-            gains.kI,
-            gains.kD,
-            new TrapezoidProfile.Constraints(
-                mmConfig.MotionMagicCruiseVelocity, mmConfig.MotionMagicAcceleration));
+            config.kP(),
+            config.kI(),
+            config.kD(),
+            new TrapezoidProfile.Constraints(config.maxVelocity(), config.maxAcceleration()));
   }
 
   @Override
